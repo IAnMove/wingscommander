@@ -349,26 +349,28 @@ const glowTex = radialTexture(128, [[0, 'rgba(255,255,255,1)'], [0.25, 'rgba(255
 // Modelos GLB + texturas FX (con fallback procedural si falta un archivo)
 // ----------------------------------------------------------------------------
 const ASSETS = { models: {}, textures: {}, ready: false };
+// Build (tools/build-dist.mjs) inyecta data: URIs en __STARWING_PACK para file://.
+const PACK = globalThis.__STARWING_PACK || {};
 const MODEL_URLS = {
-  player: 'assets/models/confed_interceptor.glb',
-  drone: 'assets/models/kil_drone.glb',
-  gunner: 'assets/models/kil_gunner.glb',
-  ace: 'assets/models/kil_ace.glb',
-  beacon: 'assets/models/beacon_tower.glb',
-  missile: 'assets/models/swarm_missile.glb',
-  xp: 'assets/models/xp_gem.glb',
-  repair: 'assets/models/repair_capsule.glb',
+  player: PACK.player || 'assets/models/confed_interceptor.glb',
+  drone: PACK.drone || 'assets/models/kil_drone.glb',
+  gunner: PACK.gunner || 'assets/models/kil_gunner.glb',
+  ace: PACK.ace || 'assets/models/kil_ace.glb',
+  beacon: PACK.beacon || 'assets/models/beacon_tower.glb',
+  missile: PACK.missile || 'assets/models/swarm_missile.glb',
+  xp: PACK.xp || 'assets/models/xp_gem.glb',
+  repair: PACK.repair || 'assets/models/repair_capsule.glb',
 };
 const TEX_URLS = {
-  muzzle: 'assets/fx/muzzle_cyan.png',
-  muzzleEnemy: 'assets/fx/muzzle_enemy.png',
-  engine: 'assets/fx/engine.png',
-  explosion: 'assets/fx/explosion.png',
-  nova: 'assets/fx/nova.png',
-  boltP: 'assets/fx/bolt_cyan.png',
-  boltT: 'assets/fx/bolt_gold.png',
-  boltE: 'assets/fx/bolt_red.png',
-  orb: 'assets/fx/orb.png',
+  muzzle: PACK.muzzle || 'assets/fx/muzzle_cyan.png',
+  muzzleEnemy: PACK.muzzleEnemy || 'assets/fx/muzzle_enemy.png',
+  engine: PACK.engine || 'assets/fx/engine.png',
+  explosion: PACK.explosion || 'assets/fx/explosion.png',
+  nova: PACK.nova || 'assets/fx/nova.png',
+  boltP: PACK.boltP || 'assets/fx/bolt_cyan.png',
+  boltT: PACK.boltT || 'assets/fx/bolt_gold.png',
+  boltE: PACK.boltE || 'assets/fx/bolt_red.png',
+  orb: PACK.orb || 'assets/fx/orb.png',
 };
 // Packed GLBs are unit-sized. Ships were longest on +X; lookAt uses -Z.
 const MODEL_FIT = {

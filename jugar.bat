@@ -1,5 +1,10 @@
 @echo off
 cd /d "%~dp0"
-start "" http://localhost:8000
-python -m http.server 8000
-pause
+if not exist "dist\index.html" (
+  echo Falta dist. Generalo una vez con:
+  echo   npm install
+  echo   npm run build
+  pause
+  exit /b 1
+)
+start "" "%~dp0dist\index.html"

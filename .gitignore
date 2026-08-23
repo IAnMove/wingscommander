@@ -1,3 +1,40 @@
+# fuentes Meshy (GLB pesados + manifiestos con rutas locales)
 source_assets/
+
+# secretos
 .env
+.env.*
+!.env.example
+
+# dependencias
 node_modules/
+
+# capturas de smoke / tests locales
+dist/smoke*.png
+dist/*.png
+
+# logs y caches de npm
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+*.log
+.npm
+.cache/
+.parcel-cache/
+.turbo/
+
+# temporales de SO / editor
+*.tmp
+*.temp
+*.swp
+*~
+.DS_Store
+Thumbs.db
+Desktop.ini
+tmp/
+temp/
+.vscode/
+.idea/
+.claude/
+

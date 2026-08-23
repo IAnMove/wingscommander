@@ -3,5 +3,12 @@
   "version": "2.0.0",
   "type": "module",
   "private": true,
-  "description": "Wing Commander × Vampire Survivors — supervivencia orbital 3D sobre planetas épicos, en el navegador"
+  "description": "Wing Commander × Vampire Survivors — supervivencia orbital 3D sobre planetas épicos, en el navegador",
+  "scripts": {
+    "build": "node tools/build-dist.mjs"
+  },
+  "devDependencies": {
+    "esbuild": "^0.25.9",
+    "three": "0.160.0"
+  }
 }

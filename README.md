@@ -4,7 +4,7 @@
 la superficie de planetas épicos, mientras enjambres interminables de enemigos te acosan.
 Tus armas disparan solas: tú vuelas, esquivas, recoges experiencia y **evolucionas**.
 
-Hecho con [Three.js](https://threejs.org) vía CDN — sin build ni dependencias que instalar.
+Hecho con [Three.js](https://threejs.org). El código fuente se puede servir tal cual; el `dist/` es un paquete estático para jugar **sin servidor**.
 
 ## Novedades de esta versión
 
@@ -35,13 +35,65 @@ Hecho con [Three.js](https://threejs.org) vía CDN — sin build ni dependencias
 
 ## Cómo jugar
 
-El juego usa módulos ES, así que necesita un servidor local (no funciona con doble clic en `index.html`):
+El `dist/` es un paquete estático. Three.js, el juego y los assets van **dentro** de esos archivos: el navegador lo ejecuta todo en cliente. No hace falta Node, Python ni ningún servidor.
 
-- **Windows:** doble clic en `jugar.bat` (usa Python), o
-- `python -m http.server 8000` y abre http://localhost:8000
-- Alternativa: `npx serve .`
+- **Windows:** doble clic en `jugar.bat`, o abre `dist/index.html`.
+- Para llevarte el juego: copia la carpeta `dist/` entera (`index.html` + `game.js` + `pack.js` juntos).
 
-Necesita conexión a internet la primera vez (Three.js se carga desde unpkg).
+Las fuentes de Google se piden online si hay conexión; si no, el juego usa las del sistema.
+
+Para **desarrollar** (editar `game.js` / `index.html` de la raíz) sí hace falta un servidor local, porque el navegador bloquea módulos ES en `file://`. Doble clic en `jugar-dev.bat`, o:
+
+```
+python -m http.server 8000
+```
+
+y abre http://localhost:8000
+
+## Cómo se genera el dist
+
+El origen del juego es `index.html` + `game.js` + `assets/`. Eso **no** se puede abrir con doble clic: Chrome bloquea `import` de módulos locales y el `fetch` de los `.glb`. El build fabrica un paquete que sí funciona en `file://`.
+
+### Qué hace el build
+
+`npm run build` ejecuta [`tools/build-dist.mjs`](tools/build-dist.mjs):
+
+1. **Empaqueta los assets** (`assets/models/*.glb` y `assets/fx/*.png`) como `data:` URIs en `dist/pack.js`. El juego los lee de `globalThis.__STARWING_PACK` (si no hay pack, sigue usando las rutas de archivo, que es el modo desarrollo).
+2. **Empaqueta el JavaScript** con [esbuild](https://esbuild.github.io): junta `game.js` + Three.js 0.160.0 + addons (GLTFLoader, bloom, etc.) en un solo IIFE `dist/game.js`. Ya no hay `importmap` ni CDN.
+3. **Escribe `dist/index.html`**: copia el HTML de la raíz y sustituye los `<script type="module">` por:
+
+```html
+<script src="pack.js"></script>
+<script src="game.js"></script>
+```
+
+Resultado:
+
+| Archivo | Qué es |
+|---|---|
+| `dist/index.html` | UI / CSS / markup |
+| `dist/game.js` | Three.js + lógica del juego (~0.6 MB) |
+| `dist/pack.js` | naves y FX embebidos (~11 MB) |
+
+### Requisitos (solo para generar, no para jugar)
+
+- [Node.js](https://nodejs.org) 18+ (lleva `npm`)
+
+### Pasos
+
+En la raíz del repo:
+
+```
+npm install
+npm run build
+```
+
+- `npm install` baja **solo** herramientas de build (`esbuild`, `three`). Quedan en `node_modules/` (ignorado por git).
+- `npm run build` regenera `dist/` entero. Tarda unos segundos.
+
+Vuelve a hacerlo cada vez que cambies `game.js`, `index.html` o un archivo de `assets/`. Luego abre `dist/index.html` (o `jugar.bat`) para comprobarlo.
+
+No hace falta dejar Node instalado en la máquina que **juega**: con copiar `dist/` basta.
 
 ## Controles
 
