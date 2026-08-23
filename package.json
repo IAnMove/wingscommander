@@ -1,7 +1,7 @@
 {
-  "name": "star-wing-2026",
-  "version": "1.0.0",
+  "name": "star-wing-survivors",
+  "version": "2.0.0",
   "type": "module",
   "private": true,
-  "description": "Clon modernizado de Wing Commander — combate espacial 3D en el navegador"
+  "description": "Wing Commander × Vampire Survivors — supervivencia orbital 3D sobre planetas épicos, en el navegador"
 }

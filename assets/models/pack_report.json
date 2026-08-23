@@ -1,0 +1,114 @@
+[
+  {
+    "name": "confed_interceptor",
+    "kind": "ship",
+    "src": "I:\\kimi\\wingcommander\\source_assets\\meshy\\confed_interceptor\\confed_interceptor_textured.glb",
+    "dst": "I:\\kimi\\wingcommander\\assets\\models\\confed_interceptor.glb",
+    "bytes": 585420,
+    "tris_in": 11928,
+    "tris_out": 3499,
+    "size": [
+      1.0052,
+      0.9168,
+      0.3847
+    ]
+  },
+  {
+    "name": "kil_drone",
+    "kind": "ship",
+    "src": "I:\\kimi\\wingcommander\\source_assets\\meshy\\kil_drone\\kil_drone_textured.glb",
+    "dst": "I:\\kimi\\wingcommander\\assets\\models\\kil_drone.glb",
+    "bytes": 197528,
+    "tris_in": 8503,
+    "tris_out": 1600,
+    "size": [
+      1.0047,
+      0.8132,
+      0.5927
+    ]
+  },
+  {
+    "name": "kil_gunner",
+    "kind": "ship",
+    "src": "I:\\kimi\\wingcommander\\source_assets\\meshy\\kil_gunner\\kil_gunner_textured.glb",
+    "dst": "I:\\kimi\\wingcommander\\assets\\models\\kil_gunner.glb",
+    "bytes": 274748,
+    "tris_in": 8147,
+    "tris_out": 2000,
+    "size": [
+      1.0063,
+      0.7969,
+      0.2885
+    ]
+  },
+  {
+    "name": "kil_ace",
+    "kind": "ship",
+    "src": "I:\\kimi\\wingcommander\\source_assets\\meshy\\kil_ace\\kil_ace_textured.glb",
+    "dst": "I:\\kimi\\wingcommander\\assets\\models\\kil_ace.glb",
+    "bytes": 680700,
+    "tris_in": 8925,
+    "tris_out": 2400,
+    "size": [
+      1.008,
+      0.9633,
+      0.3292
+    ]
+  },
+  {
+    "name": "beacon_tower",
+    "kind": "tower",
+    "src": "I:\\kimi\\wingcommander\\source_assets\\meshy\\beacon_tower\\beacon_tower_textured.glb",
+    "dst": "I:\\kimi\\wingcommander\\assets\\models\\beacon_tower.glb",
+    "bytes": 225672,
+    "tris_in": 7753,
+    "tris_out": 1600,
+    "size": [
+      0.5985,
+      0.595,
+      1.0049
+    ]
+  },
+  {
+    "name": "swarm_missile",
+    "kind": "ship",
+    "src": "I:\\kimi\\wingcommander\\source_assets\\meshy\\swarm_missile\\swarm_missile_textured.glb",
+    "dst": "I:\\kimi\\wingcommander\\assets\\models\\swarm_missile.glb",
+    "bytes": 77936,
+    "tris_in": 4032,
+    "tris_out": 500,
+    "size": [
+      1.0049,
+      0.46,
+      0.499
+    ]
+  },
+  {
+    "name": "xp_gem",
+    "kind": "prop",
+    "src": "I:\\kimi\\wingcommander\\source_assets\\meshy\\xp_gem\\xp_gem_textured.glb",
+    "dst": "I:\\kimi\\wingcommander\\assets\\models\\xp_gem.glb",
+    "bytes": 73748,
+    "tris_in": 2736,
+    "tris_out": 350,
+    "size": [
+      0.8538,
+      0.7728,
+      0.9936
+    ]
+  },
+  {
+    "name": "repair_capsule",
+    "kind": "prop",
+    "src": "I:\\kimi\\wingcommander\\source_assets\\meshy\\repair_capsule\\repair_capsule_textured.glb",
+    "dst": "I:\\kimi\\wingcommander\\assets\\models\\repair_capsule.glb",
+    "bytes": 79876,
+    "tris_in": 3204,
+    "tris_out": 400,
+    "size": [
+      0.7158,
+      0.7022,
+      1.013
+    ]
+  }
+]

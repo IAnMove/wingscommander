@@ -3,13 +3,13 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>STAR WING // 2026</title>
+<title>STAR WING // SURVIVORS</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700;900&family=Share+Tech+Mono&display=swap" rel="stylesheet">
 <style>
   :root{
     --cy:#35f0ff; --cy-dim:rgba(53,240,255,.35);
-    --or:#ff9a3c; --red:#ff3b4e; --grn:#4dff88;
+    --or:#ff9a3c; --red:#ff3b4e; --grn:#4dff88; --xp:#c46bff;
     --panel:rgba(4,18,26,.55);
   }
   *{margin:0;padding:0;box-sizing:border-box}
@@ -28,6 +28,8 @@
     transition:opacity .35s}
   #boost-lines{position:fixed;inset:0;pointer-events:none;z-index:5;opacity:0;transition:opacity .2s;
     background:radial-gradient(ellipse at center,transparent 40%,rgba(53,240,255,.12) 75%,rgba(53,240,255,.3) 100%)}
+  #zone-flash{position:fixed;inset:0;pointer-events:none;z-index:7;opacity:0;transition:opacity .3s;
+    background:radial-gradient(ellipse at center,transparent 45%,rgba(255,154,60,.28) 100%)}
 
   /* ---------- HUD ---------- */
   #hud{position:fixed;inset:0;pointer-events:none;z-index:10;display:none}
@@ -48,20 +50,39 @@
     padding:10px 14px;backdrop-filter:blur(3px);
     clip-path:polygon(0 0,calc(100% - 14px) 0,100% 14px,100% 100%,14px 100%,0 calc(100% - 14px))}
 
-  /* superior izquierda: misión */
-  #mission-panel{top:24px;left:24px;min-width:210px}
+  /* superior izquierda: misión / xp */
+  #mission-panel{top:24px;left:24px;min-width:230px}
   #mission-panel .label{font-size:10px;letter-spacing:2px;opacity:.7}
   #score{font-size:26px;font-weight:700;color:#fff;text-shadow:0 0 12px var(--cy)}
-  #wave-line{font-size:13px;margin-top:2px;color:var(--or)}
+  #planet-line{font-size:13px;margin-top:2px;color:var(--or);letter-spacing:1px}
   #kills-line{font-size:11px;opacity:.75;margin-top:2px}
+  #timer-line{font-size:11px;opacity:.85;margin-top:2px;color:var(--grn)}
+  .xp-row{display:flex;align-items:center;gap:8px;margin-top:8px}
+  #level-badge{font-family:'Orbitron',sans-serif;font-size:14px;font-weight:700;color:var(--xp);
+    text-shadow:0 0 10px var(--xp);white-space:nowrap}
+  #xp-bar{flex:1;height:8px;background:rgba(255,255,255,.08);position:relative;overflow:hidden;
+    clip-path:polygon(0 0,calc(100% - 5px) 0,100% 100%,0 100%)}
+  #xp-bar>div{height:100%;width:0%;background:linear-gradient(90deg,#7a2fd0,var(--xp));
+    box-shadow:0 0 10px var(--xp);transition:width .15s}
 
   /* superior derecha: radar + objetivo */
   #radar-panel{top:24px;right:24px;text-align:center}
   #radar{display:block;margin:0 auto}
-  #target-info{margin-top:8px;font-size:11px;text-align:left;min-width:170px;min-height:48px}
+  #target-info{margin-top:8px;font-size:11px;text-align:left;min-width:170px;min-height:30px}
   #target-info .t-name{color:var(--or);font-size:12px;letter-spacing:1px}
   .t-bar{height:5px;background:rgba(255,255,255,.1);margin-top:4px}
   .t-bar>div{height:100%;background:var(--red);width:0%;transition:width .15s}
+
+  /* armas (izquierda centro) */
+  #weapon-panel{top:230px;left:24px;min-width:230px}
+  #weapon-panel .label{font-size:10px;letter-spacing:2px;opacity:.7;margin-bottom:6px}
+  .wrow{display:flex;align-items:center;gap:8px;margin:5px 0;font-size:11px}
+  .wrow .wname{flex:1;letter-spacing:1px}
+  .wrow .wlv{font-family:'Orbitron',sans-serif;font-size:11px;color:var(--or)}
+  .wpips{display:flex;gap:2px}
+  .wpip{width:7px;height:7px;background:rgba(255,255,255,.12);
+    transform:rotate(45deg)}
+  .wpip.on{background:var(--or);box-shadow:0 0 6px var(--or)}
 
   /* inferior izquierda: escudos / casco */
   #status-panel{bottom:24px;left:24px;width:250px}
@@ -76,7 +97,7 @@
   #sys-line.warn{color:var(--red);animation:blink .5s infinite alternate}
   @keyframes blink{from{opacity:1}to{opacity:.25}}
 
-  /* inferior derecha: velocidad / calor */
+  /* inferior derecha: velocidad / calor / altitud */
   #engine-panel{bottom:24px;right:24px;width:250px;text-align:right}
   #speed-val{font-size:30px;font-weight:700;color:#fff;font-family:'Orbitron',sans-serif;
     text-shadow:0 0 12px var(--cy)}
@@ -84,8 +105,22 @@
   .bar-col{margin-top:6px}
   #throttle-bar>div{background:var(--cy)}
   #heat-bar>div{background:linear-gradient(90deg,var(--or),var(--red))}
+  #alt-bar>div{background:linear-gradient(90deg,var(--red),var(--grn),var(--cy))}
   #heat-label{font-size:10px;letter-spacing:1px;opacity:.8;margin-top:2px}
   #heat-label.hot{color:var(--red);animation:blink .4s infinite alternate}
+  #alt-label{font-size:10px;letter-spacing:1px;opacity:.8;margin-top:4px}
+  #alt-label.warn{color:var(--or);animation:blink .4s infinite alternate}
+  #view-label{font-size:10px;letter-spacing:1px;opacity:.6;margin-top:4px}
+
+  /* mapa mundial (niebla de guerra) — inferior centro */
+  #map-panel{bottom:24px;left:50%;transform:translateX(-50%);text-align:center;padding:6px 8px 8px}
+  #worldmap{display:block;image-rendering:pixelated;border:1px solid var(--cy-dim)}
+  #map-label{font-size:9px;letter-spacing:1px;opacity:.7;margin-top:4px}
+  #map-large{position:fixed;inset:0;z-index:15;display:none;align-items:center;justify-content:center;
+    flex-direction:column;background:rgba(0,4,10,.78);backdrop-filter:blur(4px)}
+  #map-large h3{font-family:'Orbitron',sans-serif;letter-spacing:6px;font-size:20px;margin-bottom:14px;color:#fff}
+  #worldmap-big{border:1px solid var(--cy-dim);image-rendering:pixelated;box-shadow:0 0 40px rgba(53,240,255,.25)}
+  #map-large .hint{margin-top:16px}
 
   /* retícula y bloqueo */
   #crosshair{position:fixed;left:50%;top:50%;transform:translate(-50%,-50%);z-index:9;pointer-events:none}
@@ -104,28 +139,69 @@
   .comm-msg.enemy{color:var(--red);text-shadow:0 0 10px var(--red)}
   .comm-msg.good{color:var(--grn);text-shadow:0 0 10px var(--grn)}
   .comm-msg.gold{color:var(--or);text-shadow:0 0 10px var(--or)}
+  .comm-msg.xp{color:var(--xp);text-shadow:0 0 10px var(--xp)}
   @keyframes comm-in{from{transform:translateY(-12px);opacity:0}to{transform:none;opacity:1}}
 
   /* ---------- menús ---------- */
   .menu{position:fixed;inset:0;z-index:20;display:flex;flex-direction:column;
     align-items:center;justify-content:center;background:rgba(0,4,10,.82);backdrop-filter:blur(6px)}
-  .menu h1{font-family:'Orbitron',sans-serif;font-size:64px;font-weight:900;letter-spacing:8px;
-    color:#fff;text-shadow:0 0 30px var(--cy),0 0 80px var(--cy)}
+  .menu h1{font-family:'Orbitron',sans-serif;font-size:60px;font-weight:900;letter-spacing:6px;
+    color:#fff;text-shadow:0 0 30px var(--cy),0 0 80px var(--cy);text-align:center}
   .menu h1 span{color:var(--or);text-shadow:0 0 30px var(--or),0 0 80px var(--or)}
-  .menu h2{font-size:14px;letter-spacing:6px;opacity:.7;margin:8px 0 30px}
+  .menu h2{font-size:14px;letter-spacing:5px;opacity:.7;margin:8px 0 24px;text-align:center}
+  .btn:disabled{opacity:.45;cursor:wait;pointer-events:none}
   .btn{pointer-events:auto;cursor:pointer;font-family:'Orbitron',sans-serif;font-size:18px;
     letter-spacing:4px;color:var(--cy);background:transparent;border:1px solid var(--cy);
-    padding:14px 46px;margin-top:26px;transition:all .2s;
+    padding:14px 46px;margin-top:22px;transition:all .2s;
     clip-path:polygon(12px 0,100% 0,100% calc(100% - 12px),calc(100% - 12px) 100%,0 100%,0 12px)}
   .btn:hover{background:var(--cy);color:#001318;box-shadow:0 0 30px var(--cy)}
-  .controls-list{margin-top:10px;font-size:13px;line-height:1.9;opacity:.85;text-align:center}
+  .controls-list{margin-top:10px;font-size:13px;line-height:1.85;opacity:.85;text-align:center}
   .controls-list b{color:var(--or);display:inline-block;min-width:150px;text-align:right;margin-right:14px}
-  #final-stats{font-size:18px;line-height:2;margin-top:6px}
+
+  /* selección de planeta */
+  #planet-select{display:flex;gap:24px;margin:6px 0 4px}
+  .planet-card{pointer-events:auto;cursor:pointer;width:200px;padding:18px;text-align:center;
+    border:1px solid var(--cy-dim);background:var(--panel);transition:all .2s;
+    clip-path:polygon(10px 0,100% 0,100% calc(100% - 10px),calc(100% - 10px) 100%,0 100%,0 10px)}
+  .planet-card:hover,.planet-card.sel{border-color:var(--or);box-shadow:0 0 24px rgba(255,154,60,.4)}
+  .planet-card .orb{width:110px;height:110px;border-radius:50%;margin:0 auto 12px}
+  .planet-card.sun .orb{background:radial-gradient(circle at 40% 35%,#ffb347,#c2500e 45%,#400e02 100%);
+    box-shadow:0 0 40px #ff8a1e,0 0 90px #ff5a00}
+  .planet-card.bluestar .orb{background:radial-gradient(circle at 40% 35%,#dcefff,#2a5adf 45%,#060f2a 100%);
+    box-shadow:0 0 40px #5aa0ff,0 0 90px #2a5adf}
+  .planet-card.jupiter .orb{background:
+    repeating-linear-gradient(180deg,#d9b48a 0 10px,#b5794f 10px 18px,#e6cba6 18px 26px,#8a5a3c 26px 34px);
+    box-shadow:0 0 40px #b5794f}
+  .planet-card.neptune .orb{background:
+    repeating-linear-gradient(180deg,#bfe8e0 0 10px,#4aa8a0 10px 18px,#2a6a78 18px 26px,#1e4a5a 26px 34px);
+    box-shadow:0 0 40px #4aa8a0}
+  .planet-card h3{font-family:'Orbitron',sans-serif;font-size:18px;letter-spacing:2px;color:#fff}
+  .planet-card p{font-size:11px;opacity:.7;margin-top:6px;line-height:1.5}
+
+  #final-stats{font-size:18px;line-height:2;margin-top:6px;text-align:center}
   #final-stats b{color:#fff;font-family:'Orbitron',sans-serif}
   #pause-menu{display:none}
   #gameover-menu{display:none}
-  #gameover-menu h1{font-size:52px;color:var(--red);text-shadow:0 0 30px var(--red),0 0 80px var(--red)}
-  .hint{margin-top:24px;font-size:11px;letter-spacing:2px;opacity:.5}
+  #gameover-menu h1{font-size:50px;color:var(--red);text-shadow:0 0 30px var(--red),0 0 80px var(--red)}
+  .hint{margin-top:22px;font-size:11px;letter-spacing:2px;opacity:.5;text-align:center}
+
+  /* ---------- menú de subida de nivel ---------- */
+  #levelup-menu{position:fixed;inset:0;z-index:22;display:none;flex-direction:column;
+    align-items:center;justify-content:center;background:rgba(10,2,20,.7);backdrop-filter:blur(5px)}
+  #levelup-menu h1{font-family:'Orbitron',sans-serif;font-size:40px;font-weight:900;letter-spacing:6px;
+    color:var(--xp);text-shadow:0 0 30px var(--xp),0 0 70px var(--xp)}
+  #levelup-menu .sub{font-size:13px;letter-spacing:4px;opacity:.75;margin:6px 0 26px}
+  #levelup-cards{display:flex;gap:22px;flex-wrap:wrap;justify-content:center;max-width:900px}
+  .up-card{pointer-events:auto;cursor:pointer;width:240px;min-height:190px;padding:20px;
+    border:1px solid var(--xp);background:rgba(20,6,34,.75);transition:all .18s;
+    display:flex;flex-direction:column;
+    clip-path:polygon(12px 0,100% 0,100% calc(100% - 12px),calc(100% - 12px) 100%,0 100%,0 12px)}
+  .up-card:hover{transform:translateY(-6px);box-shadow:0 0 34px rgba(196,107,255,.55);
+    background:rgba(40,12,64,.9)}
+  .up-card .ic{font-size:34px;margin-bottom:8px}
+  .up-card h3{font-family:'Orbitron',sans-serif;font-size:17px;letter-spacing:1px;color:#fff}
+  .up-card .lvl{font-size:11px;color:var(--or);letter-spacing:2px;margin:4px 0 10px}
+  .up-card p{font-size:12px;line-height:1.5;opacity:.85;flex:1}
 </style>
 </head>
 <body>
@@ -135,6 +211,7 @@
 <div id="vignette"></div>
 <div id="scanlines"></div>
 <div id="boost-lines"></div>
+<div id="zone-flash"></div>
 <div id="damage-flash"></div>
 
 <!-- ============ HUD ============ -->
@@ -145,8 +222,13 @@
   <div id="mission-panel" class="panel">
     <div class="label">PUNTUACIÓN</div>
     <div id="score" class="hud-font">0</div>
-    <div id="wave-line">OLEADA 1</div>
+    <div id="planet-line">— · —</div>
     <div id="kills-line">BAJAS: 0 · ENEMIGOS: 0</div>
+    <div id="timer-line">TIEMPO 0:00</div>
+    <div class="xp-row">
+      <span id="level-badge">Lv 1</span>
+      <div id="xp-bar"><div></div></div>
+    </div>
   </div>
 
   <div id="radar-panel" class="panel">
@@ -156,6 +238,11 @@
       <div id="t-dist">--</div>
       <div class="t-bar"><div id="t-hull"></div></div>
     </div>
+  </div>
+
+  <div id="weapon-panel" class="panel">
+    <div class="label">ARMAMENTO</div>
+    <div id="weapon-list"></div>
   </div>
 
   <div id="status-panel" class="panel">
@@ -169,6 +256,9 @@
     <div class="bar-col"><div class="bar" id="throttle-bar"><div style="width:0%"></div></div></div>
     <div class="bar-col"><div class="bar" id="heat-bar"><div style="width:0%"></div></div></div>
     <div id="heat-label">ARMAS: LISTAS</div>
+    <div class="bar-col"><div class="bar" id="alt-bar"><div style="width:0%"></div></div></div>
+    <div id="alt-label">ALTITUD</div>
+    <div id="view-label">CÁMARA: CENITAL ISO (C · rueda)</div>
   </div>
 
   <svg id="crosshair" width="60" height="60" viewBox="0 0 60 60">
@@ -182,30 +272,71 @@
   <div id="lockbox"></div>
   <div id="lock-label">FIJANDO</div>
 
+  <div id="map-panel" class="panel">
+    <canvas id="worldmap" width="220" height="110"></canvas>
+    <div id="map-label">MAPA (M) · 0% EXPLORADO</div>
+  </div>
+
   <div id="comms"></div>
+</div>
+
+<!-- ============ MAPA GRANDE ============ -->
+<div id="map-large">
+  <h3>MAPA PLANETARIO</h3>
+  <canvas id="worldmap-big" width="900" height="450"></canvas>
+  <div class="hint">M PARA CERRAR · LO NO EXPLORADO PERMANECE OCULTO</div>
 </div>
 
 <!-- ============ MENÚ PRINCIPAL ============ -->
 <div id="main-menu" class="menu">
-  <h1>STAR WING <span>// 2026</span></h1>
-  <h2>COMBATE ESPACIAL · REMAKE NO OFICIAL DEL CLÁSICO</h2>
-  <div class="controls-list">
-    <div><b>RATÓN</b> pilotar la nave</div>
-    <div><b>CLIC IZQ / ESPACIO</b> cañones láser</div>
-    <div><b>CLIC DER / M</b> misil (mantén el objetivo en la retícula para fijarlo)</div>
-    <div><b>W / S</b> acelerador</div>
-    <div><b>A / D</b> alabeo</div>
-    <div><b>SHIFT</b> postcombustión</div>
-    <div><b>T</b> seleccionar objetivo · <b>P</b> pausa</div>
+  <h1>STAR WING <span>// SURVIVORS</span></h1>
+  <h2>SUPERVIVENCIA ORBITAL · PILOTA · SOBREVIVE · EVOLUCIONA</h2>
+
+  <div id="planet-select">
+    <div class="planet-card sun sel" data-planet="sun">
+      <div class="orb"></div>
+      <h3>HELIOS PRIME</h3>
+      <p>Estrella enana. Plasma, calor y enjambres feroces. Gravedad intensa.</p>
+    </div>
+    <div class="planet-card bluestar" data-planet="bluestar">
+      <div class="orb"></div>
+      <h3>VEGA AZUL</h3>
+      <p>Gigante azul. Plasma frío y letal. Gravedad extrema, enjambre implacable.</p>
+    </div>
+    <div class="planet-card jupiter" data-planet="jupiter">
+      <div class="orb"></div>
+      <h3>GIGANTE JOVIANO</h3>
+      <p>Gigante gaseoso de bandas. Tormentas eternas. Gravedad moderada.</p>
+    </div>
+    <div class="planet-card neptune" data-planet="neptune">
+      <div class="orb"></div>
+      <h3>ABISMO TURQUESA</h3>
+      <p>Gigante helado de bandas turquesa. Vientos eternos. Gravedad suave.</p>
+    </div>
   </div>
-  <button class="btn" id="start-btn">INICIAR MISIÓN</button>
-  <div class="hint">AURICULARES RECOMENDADOS · MEJOR EN PANTALLA COMPLETA (F11)</div>
+
+  <div class="controls-list">
+    <div><b>RATÓN</b> apuntar (cabeceo y giro, estilo Star Fox · pasillo de altura)</div>
+    <div><b>W / S</b> acelerador · <b>A / D</b> girar / alabeo · <b>SHIFT</b> postcombustión</div>
+    <div><b>ARMAS</b> disparan solas (varias, estilo Survivors)</div>
+    <div><b>C</b> cámara: cenital / 3ª / 1ª (en cenital: A/D lateral, la nave vuela sola) · <b>RUEDA</b> zoom · <b>M</b> mapa</div>
+    <div><b>ESPACIO</b> disparo frontal extra · <b>P / Esc</b> pausa</div>
+  </div>
+  <button class="btn" id="start-btn">DESPLEGAR</button>
+  <div class="hint">EL PLANETA ES INMENSO Y ESFÉRICO · VUELA LO SUFICIENTE Y REGRESARÁS · DESCUBRE EL MAPA</div>
 </div>
 
 <!-- ============ PAUSA ============ -->
 <div id="pause-menu" class="menu">
   <h1 style="font-size:40px">PAUSA</h1>
   <button class="btn" id="resume-btn">REANUDAR</button>
+</div>
+
+<!-- ============ SUBIDA DE NIVEL ============ -->
+<div id="levelup-menu">
+  <h1>NIVEL SUPERADO</h1>
+  <div class="sub">ELIGE UNA MEJORA</div>
+  <div id="levelup-cards"></div>
 </div>
 
 <!-- ============ GAME OVER ============ -->
