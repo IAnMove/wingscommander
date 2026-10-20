@@ -126,3 +126,10 @@ No hace falta dejar Node instalado en la máquina que **juega**: con copiar `dis
 Three.js y del DOM, y ejercita el ciclo completo (menú → despliegue → bucle de juego →
 subida de nivel → mejoras → cambio de cámara → ambos planetas) verificando que no lanza
 excepciones. Los archivos de prueba viven en el directorio temporal de la sesión.
+
+## Licencia
+
+El código de este juego se publica bajo la [licencia MIT](LICENSE).
+© 2026 Ignacio del Cano (IAnMove).
+
+Las dependencias y assets de terceros conservan su propia licencia; ver [THIRD_PARTY.md](THIRD_PARTY.md).
