@@ -7,7 +7,12 @@
   "description": "Un shooter de supervivencia orbital en 3D: vuela en primera o tercera persona, esquiva, recoge experiencia y evoluciona seis armas automáticas.",
   "type": "game",
   "genre": "shooter survival 3D",
-  "tags": ["3d", "arcade", "space", "supervivencia"],
+  "tags": [
+    "3d",
+    "arcade",
+    "space",
+    "supervivencia"
+  ],
   "version": "2.0.0",
   "status": "published",
   "featured": false,
@@ -15,8 +20,14 @@
   "entry": "index.html",
   "accent": "#35f0ff",
   "screenshots": [
-    {"src": "./screenshots/iso.png", "alt": "Vista cenital del caza sobre un planeta con el HUD de combate"},
-    {"src": "./screenshots/third.png", "alt": "Vista en tercera persona del caza durante una batalla orbital"}
+    {
+      "src": "./screenshots/iso.png",
+      "alt": "Vista cenital del caza sobre un planeta con el HUD de combate"
+    },
+    {
+      "src": "./screenshots/third.png",
+      "alt": "Vista en tercera persona del caza durante una batalla orbital"
+    }
   ],
   "art": [
     "          /\\          ",
@@ -27,16 +38,88 @@
     "      *   ||   *      "
   ],
   "controls": [
-    {"key": "Ratón", "action": "Pilotar el caza"},
-    {"key": "W / S", "action": "Acelerar y frenar"},
-    {"key": "A / D", "action": "Alabeo o desplazamiento lateral"},
-    {"key": "C", "action": "Cambiar cámara"},
-    {"key": "Shift", "action": "Postcombustión"},
-    {"key": "P / Esc", "action": "Pausa"}
+    {
+      "key": "Ratón",
+      "action": "Pilotar el caza"
+    },
+    {
+      "key": "W / S",
+      "action": "Acelerar y frenar"
+    },
+    {
+      "key": "A / D",
+      "action": "Alabeo o desplazamiento lateral"
+    },
+    {
+      "key": "C",
+      "action": "Cambiar cámara"
+    },
+    {
+      "key": "Shift",
+      "action": "Postcombustión"
+    },
+    {
+      "key": "P / Esc",
+      "action": "Pausa"
+    }
   ],
   "features": [
     "Cuatro mundos planetarios circunnavegables",
     "Seis armas automáticas y mejoras por experiencia",
     "Primera, tercera persona y vista cenital con minimapa"
-  ]
+  ],
+  "i18n": {
+    "en": {
+      "shortDescription": "Fly a fighter over epic planets and survive endless swarms.",
+      "description": "A 3D orbital survival shooter: fly in first or third person, dodge, collect experience and evolve six automatic weapons.",
+      "genre": "3D survival shooter",
+      "tags": [
+        "3d",
+        "arcade",
+        "space",
+        "survival"
+      ],
+      "screenshots": [
+        {
+          "src": "./screenshots/iso.png",
+          "alt": "Top-down view of the fighter over a planet with the combat HUD"
+        },
+        {
+          "src": "./screenshots/third.png",
+          "alt": "Third-person view of the fighter during an orbital battle"
+        }
+      ],
+      "controls": [
+        {
+          "key": "Mouse",
+          "action": "Steer the fighter"
+        },
+        {
+          "key": "W / S",
+          "action": "Speed up and brake"
+        },
+        {
+          "key": "A / D",
+          "action": "Roll or strafe"
+        },
+        {
+          "key": "C",
+          "action": "Switch camera"
+        },
+        {
+          "key": "Shift",
+          "action": "Afterburner"
+        },
+        {
+          "key": "P / Esc",
+          "action": "Pause"
+        }
+      ],
+      "features": [
+        "Four circumnavigable planet worlds",
+        "Six automatic weapons and upgrades from experience",
+        "First person, third person and top-down view with minimap"
+      ]
+    }
+  }
 }

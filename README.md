@@ -130,6 +130,6 @@ excepciones. Los archivos de prueba viven en el directorio temporal de la sesió
 ## Licencia
 
 El código de este juego se publica bajo la [licencia MIT](LICENSE).
-© 2026 Ignacio del Cano (IAnMove).
+© 2026 IAnMove.
 
 Las dependencias y assets de terceros conservan su propia licencia; ver [THIRD_PARTY.md](THIRD_PARTY.md).
